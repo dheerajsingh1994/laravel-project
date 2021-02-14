@@ -1,7 +1,7 @@
 <x-admin-master>
     @section('content')
         <h1>Create Post</h1>
-
+        {{-- {{dd($categories)}} --}}
         <form action="{{route('post.store')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
@@ -12,6 +12,15 @@
                 class="form-control"
                 aria-describedby=""
                 placeholder="Enter Title">
+            </div>
+            <div class="fom-group">
+                <label for="Category">Category</label>
+                <select name="category_id" class="form-control">
+                    <option value="0">Select Category</option>
+                    @foreach ($categories as $category)
+                        <option value="{{$category->id}}">{{$category->title}}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="File">Upload Image</label><br>

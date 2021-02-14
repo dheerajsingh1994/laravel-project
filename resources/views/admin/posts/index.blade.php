@@ -22,6 +22,7 @@
                       <th>Name</th>
                       <th>Image</th>
                       <th>Author</th>
+                      <th>Category</th>
                       <th>Created at</th>
                       <th>Updated at</th>
                       <th>Options</th>
@@ -33,25 +34,29 @@
                       <th>Name</th>
                       <th>Image</th>
                       <th>Author</th>
+                      <th>Category</th>
                       <th>Created at</th>
                       <th>Updated at</th>
                       <th>Options</th>
                     </tr>
                   </tfoot>
                   <tbody>
+                    {{-- {{dd($posts)}} --}}
                       @foreach ($posts as $post)
                         <tr>
                           <td>{{$post->id}}</td>
                           <td>{{$post->title}}</td>
                           <td>
-                            @if($post->post_image)
-                            <img src="{{$post->post_image}}" alt="{{$post->title}}" title="{{$post->title}}" height="40px"></td>
+                            @if($post->post_image != '')
+                            <img src="{{$post->post_image}}" alt="{{$post->title}}" title="{{$post->title}}" height="40px">
                             @else
                               {{'No Image Uploaded'}}
                             @endif
+                          </td>
                           <td>{{$post->user->name}}</td>
-                          <td>{{$post->created_at}}</td>
-                          <td>{{$post->updated_at}}</td>
+                          <td>{{$post->category->title}}</td>
+                          <td>{{$post->created_at->diffForHumans()}}</td>
+                          <td>{{$post->updated_at->diffForHumans()}}</td>
                             <td>
                               {{-- @can('view',$post) --}}
                               <a href="{{route('post.edit', $post->id)}}"><i class="fa fa-edit"></i></a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\User;
+use App\Category;
 use Illuminate\Support\Facades\Session; // session
 use DB;
 
@@ -16,7 +17,8 @@ class PostController extends Controller
         // $posts = Post::all()->paginate(1);
         // $posts = DB::table('posts')->paginate(1);
 
-        $posts = auth()->user()->user_posts()->paginate(1);
+        $posts = auth()->user()->user_posts()->paginate(10);
+        
         /*
             $users = User::where('id', $posts->user_id)->get();
             dd($users);
@@ -35,7 +37,8 @@ class PostController extends Controller
     // show add form
     public function create (){
         $this->authorize('create', Post::class);
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create')->withCategories($categories);;
     }
 
     // store post
@@ -43,14 +46,17 @@ class PostController extends Controller
         $this->authorize('create', Post::class);
 
         $data = request()->validate([
-            'title' => 'required',
-            'body'  => 'required', 
-            'post_image'  => 'file'
+            'title'         =>  'required',
+            'category_id'   =>  'required',
+            'body'          =>  'required',
+            'post_image'    =>  'file'
         ]);
 
         if(request('post_image')){
             $data['post_image'] = request('post_image')->store('post-images');
         }
+
+        // dd($data);
         // merge post author with post 
         auth()->user()->user_posts()->create($data);
 
@@ -88,19 +94,22 @@ class PostController extends Controller
     public function edit(Post $post){
         // UNAUTHORIZED user restriction
         // $this->authorize('view', $post);
-        return view('admin.posts.edit')->with('post', $post);
+        $categories = Category::all();
+        return view('admin.posts.edit', compact('post'))->withCategories($categories);
     }
 
     // update post [METHOD-1][understandable]
     public function update(Request $request, $id){
         $request->validate([
-            'title' => 'required',
-            'body'  => 'required', 
-            'post_image'  => 'file'
+            'title'         =>  'required',
+            'category_id'   =>  'required',
+            'body'          =>  'required', 
+            'post_image'    =>  'file'
         ]);
 
         $update_post = Post::find($id);
         $update_post->title = $request->get('title');
+        $update_post->category_id = $request->get('category_id');
         $update_post->body  = $request->get('body');
 
         if(request('post_image')){
