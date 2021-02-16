@@ -48,6 +48,21 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
+    // for reference only
+    public function illustrationPost(){
+        // return $this->hasOne('App\Post', @first_param, @second_param);
+        // @first_param = 'user_reference_id_field', @second_param = 'post_primary_id'
+        
+        return $this->hasOne('App\Post');
+        /** this will automatically look in post table for the corresponsing to the user id [here @user_id]*/
+
+        // if the user id field name is different, we have to pass it as @second_param like below
+        return $this->hasOne('App\Post', 'the_user_id'); // where "the_user_id" is the field name of user id
+        // if the relationship class has different primary key name
+        return $this->hasOne('App\Post', 'the_user_id', 'the_id');
+
+    }
+
     // user post relationship
     public function user_posts(){
         return $this->hasMany(Post::class);

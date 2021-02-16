@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', 'mailgun'),
 
     /*
     |--------------------------------------------------------------------------
@@ -53,6 +53,12 @@ return [
             'transport' => 'mailgun',
         ],
 
+        // 'mailgun' => [
+        //     'transport' => 'mailgun',
+        //     'domain' => 'sandbox46c75b222749406a847a637f26d8d4ca.mailgun.org',
+        //     'secret' => 'key-bcba1b8a3bc2c7998987652e578f81f3',
+        // ],
+
         'postmark' => [
             'transport' => 'postmark',
         ],
@@ -84,8 +90,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'dheerajsingh965@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Dheeraj Singh'),
     ],
 
     /*
