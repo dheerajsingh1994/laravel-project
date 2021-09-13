@@ -100,6 +100,7 @@ class PostController extends Controller
 
     // update post [METHOD-1][understandable]
     public function update(Request $request, $id){
+        dd($request, request('post_image'));
         $request->validate([
             'title'         =>  'required',
             'category_id'   =>  'required',

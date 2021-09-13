@@ -39,4 +39,21 @@ class Post extends Model
     public function getPostImageAttribute($value){
         return asset('storage/'.$value);
     }
+
+    // 11-09-2021
+    /**
+     * Get the post's image.
+     * morphMany() if more than one image
+     * morphOne() if only one image
+     */
+    public function photos(){
+        return $this->morphMany('App\Media', 'subject');
+    }
+
+    /**
+     * Get all of the tags for the post.
+     */
+    public function tags(){
+        return $this->morphToMany('App\Tag', 'taggable');
+    }
 }

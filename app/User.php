@@ -48,6 +48,32 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
+    // user post relationship
+    public function user_posts(){
+        return $this->hasMany(Post::class);
+    }
+
+    public function permissions(){
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class)->withPivot('created_at');
+    }
+
+    // check for user role
+    public function userHasRole($role_name){
+        foreach ($this->roles as $role) {
+            if(Str::lower($role_name) === Str::lower($role->name)){
+                return true;
+            }
+            return false;
+        }
+
+    }
+
+
+
     // for reference only
     public function illustrationPost(){
         // return $this->hasOne('App\Post', @first_param, @second_param);
@@ -63,27 +89,28 @@ class User extends Authenticatable
 
     }
 
-    // user post relationship
-    public function user_posts(){
+    // one to many relationship
+    public function illustrationOnetoManyPost(){
         return $this->hasMany(Post::class);
     }
 
-    public function permissions(){
-        return $this->belongsToMany(Permission::class);
+    // many to many relationship
+    /** NOTE Pivot table is an example of intermediate table with relationships between two other “main” tables. */
+    public function illustrationRoles(){ // get roles of a user
+        return $this->belongsToMany('App\Role');
+        /** @Incase the pivit table is not named as per the convention */
+        // return $this->belongsToMany('App\Role', @custome_tbl_name, @foreigb_key1, @foreign_key2);
+        // return $this->belongsToMany('App\Role', 'all_user_roles', 'user_id', 'role_id');
     }
 
-    public function roles(){
-        return $this->belongsToMany(Role::class);
+    // 11-09-2021
+    /**
+     * Get the user's image.
+     * morphMany() if more than one image
+     * morphOne() if only one image
+     */
+    public function photos(){
+        return $this->morphMany('App\Media', 'subject');
     }
 
-    // check for user role
-    public function userHasRole($role_name){
-        foreach ($this->roles as $role) {
-            if(Str::lower($role_name) === Str::lower($role->name)){
-                return true;
-            }
-            return false;
-        }
-
-    }
 }
