@@ -155,3 +155,18 @@ Route::get('tag/{id}/posts', function($id){
         echo $post;
     }
 });
+
+
+
+
+/**
+ * Comments and replies section
+ */
+
+Route::middleware('auth')->group(function(){
+
+    Route::resource('admin/comments', 'PostCommentsController');
+    
+    Route::resource('admin/comments', 'PostCommentsController');
+
+});

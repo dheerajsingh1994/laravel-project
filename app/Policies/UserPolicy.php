@@ -33,6 +33,7 @@ class UserPolicy
         // dd($user, $model);
         // dd($model);
         return $user->userHasRole('admin') ?: $user->id === $model->id;
+        // return $user->id === $model->id;
     }
 
     /**
@@ -56,6 +57,8 @@ class UserPolicy
     public function update(User $user, User $model)
     {
         //
+        // dd($user->id, $model->id);
+        return $user->userHasRole('admin') ?: $user->id === $model->id;
     }
 
     /**

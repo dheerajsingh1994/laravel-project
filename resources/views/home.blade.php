@@ -8,7 +8,7 @@
       {{-- {{$posts}} --}}
       @foreach($posts as $post)
         <div class="card mb-4">
-        <img class="card-img-top" src="{{$post->post_image}}" alt="{{$post->title}}">
+        <img class="card-img-top" src="{{asset($post->post_image)}}" alt="{{$post->title}}">
         <div class="card-body">
           <h2 class="card-title">{{$post->title}}</h2>
           <p class="card-text">{{Str::limit($post->body, '160', '...')}}</p>

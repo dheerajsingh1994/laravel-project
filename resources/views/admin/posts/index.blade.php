@@ -48,7 +48,7 @@
                           <td>{{$post->title}}</td>
                           <td>
                             @if($post->post_image != '')
-                            <img src="{{$post->post_image}}" alt="{{$post->title}}" title="{{$post->title}}" height="40px">
+                            <img src="{{asset($post->post_image)}}" alt="{{$post->title}}" title="{{$post->title}}" height="40px">
                             @else
                               {{'No Image Uploaded'}}
                             @endif

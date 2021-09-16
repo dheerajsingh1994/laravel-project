@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function(){
+Route::middleware(['can:update,user'])->group(function(){
     // user profile
     Route::put('/users/{user}/update', 'UserController@update')->name('user.profile.update');
 });

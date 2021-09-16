@@ -3,7 +3,7 @@
         <h1>User Profile: {{$user->name}}</h1>
         <div class="row">
             <div class="col-sm-6 mb-3">
-                <form action="{{route('user.profile.update', auth()->user())}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('user.profile.update', $user)}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">

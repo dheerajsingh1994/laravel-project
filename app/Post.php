@@ -37,7 +37,7 @@ class Post extends Model
 
     // accessor example (can be used with large data)
     public function getPostImageAttribute($value){
-        return asset('storage/'.$value);
+        return 'storage/'.$value;
     }
 
     // 11-09-2021

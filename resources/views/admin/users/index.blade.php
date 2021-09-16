@@ -48,7 +48,11 @@
                           <td>
                             <a href="{{route('user.profile.show', $user->id)}}">{{$user->username}}</a>
                           </td>
-                          <td></td>
+                          <td>
+                            @foreach ($user->roles as $role)
+                                {{$role->name}}
+                            @endforeach
+                          </td>
                           <td>
                             @if($user->avatar)
                             <img src="{{$user->avatar}}" height="40px"></td>

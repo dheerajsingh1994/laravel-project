@@ -31,7 +31,7 @@ class PostPolicy
     public function view(User $user, Post $post)
     {
         // matches post user and user id [AUTH]
-        return $user->id === $post->user_id;
+        return $user->userHasRole('admin') ?: $user->id === $post->user_id;
     }
 
     /**
@@ -56,7 +56,7 @@ class PostPolicy
     public function update(User $user, Post $post)
     {
         //
-        return $user->id === $post->user_id;
+        return $user->userHasRole('admin') ?: $user->id === $post->user_id;
     }
 
     /**
@@ -69,7 +69,7 @@ class PostPolicy
     public function delete(User $user, Post $post)
     {
         //
-        return $user->id === $post->user_id;
+        return $user->userHasRole('admin') ?: $user->id === $post->user_id;
     }
 
     /**
@@ -82,6 +82,7 @@ class PostPolicy
     public function restore(User $user, Post $post)
     {
         //
+        return $user->userHasRole('admin');
     }
 
     /**
@@ -94,5 +95,6 @@ class PostPolicy
     public function forceDelete(User $user, Post $post)
     {
         //
+        return $user->userHasRole('admin');
     }
 }

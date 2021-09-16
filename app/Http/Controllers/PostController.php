@@ -17,7 +17,13 @@ class PostController extends Controller
         // $posts = Post::all()->paginate(1);
         // $posts = DB::table('posts')->paginate(1);
 
-        $posts = auth()->user()->user_posts()->paginate(10);
+        // if(auth()->user()->userHasRole('admin')){
+        //     echo "admin";
+        // } else {
+        //     echo "not admin";
+        // }
+        // die;
+        $posts = auth()->user()->userHasRole('admin')? Post::paginate(10) : auth()->user()->user_posts()->paginate(10);
         
         /*
             $users = User::where('id', $posts->user_id)->get();
@@ -71,6 +77,9 @@ class PostController extends Controller
         $post = Post::find($id);
         $this->authorize('delete', $post);
 
+        // dd($post->post_image);
+        unlink(public_path()."/".$post->post_image);
+
         $post->delete();
 
         // display flash message [METHOD-2]
@@ -100,7 +109,7 @@ class PostController extends Controller
 
     // update post [METHOD-1][understandable]
     public function update(Request $request, $id){
-        dd($request, request('post_image'));
+        // dd($request, request('post_image'));
         $request->validate([
             'title'         =>  'required',
             'category_id'   =>  'required',
