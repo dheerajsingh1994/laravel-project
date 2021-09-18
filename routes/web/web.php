@@ -165,8 +165,8 @@ Route::get('tag/{id}/posts', function($id){
 
 Route::middleware('auth')->group(function(){
 
-    Route::resource('admin/comments', 'PostCommentsController');
+    Route::resource('admin/comments', 'PostCommentController')->middleware('role:admin');
     
-    Route::resource('admin/comments', 'PostCommentsController');
+    Route::resource('admin/comments/replies', 'CommentReplyController');
 
 });

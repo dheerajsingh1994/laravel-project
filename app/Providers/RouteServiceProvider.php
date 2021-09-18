@@ -91,8 +91,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapPostsRoutes()
     {
-        Route::prefix('admin')
-            ->middleware(['web', 'auth'])
+        Route::prefix('')
+            ->middleware(['web'])
             ->namespace($this->namespace)
             ->group(base_path('routes/web/posts.php'));
     }

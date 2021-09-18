@@ -56,4 +56,11 @@ class Post extends Model
     public function tags(){
         return $this->morphToMany('App\Tag', 'taggable');
     }
+
+    /**
+     * Get all of the comments for the post.
+     */
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
 }

@@ -8,9 +8,9 @@
                     @method('PUT')
                     <div class="form-group">
                         <div class="mb-4">
-                            <img class="img-profile rounded-circle"
-                            style="width: 100px;"
-                            src="{{$user->avatar}}">
+                            <img class="img-profile rounded"
+                            style="height: 100px;"
+                            src="{{asset($user->avatar)}}">
                         </div>
                         <input type="file" name="profile_image" id="profile_image">
                     </div>

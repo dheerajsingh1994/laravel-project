@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
+    protected $folder = 'profile-images';
+
     // users
     public function index(){
         $users = User::all();
@@ -28,6 +30,9 @@ class UserController extends Controller
 
     // update profile
     public function update(User $user){
+        // dd($user);
+        // $user->photos()->create(['path'=>'efdfsa.jpg']);
+        // dd($user->photos);
         $data = request()->validate([
             'username' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
@@ -36,9 +41,39 @@ class UserController extends Controller
         ]);
 
         if(request('profile_image')){
-            $data['avatar'] = request('profile_image')->store('profile-images');
-        }
+            $file = request('profile_image');
+            // $name = $file->getClientOriginalName();
+            // $file->move(public_path().$this->folder, $name);
+            $path1 = $file->store($this->folder);
 
+            // $media = $user->photos()->whereId($user->photo_id)->first();
+            // $id = $media->id;
+
+            // // $newMedia = $user->photos()->create(['path' => $path1]);
+            // // dd("new", $newMedia);
+
+            // if($id){
+            //     $media->path = $path1;
+            //     $media->save();
+            //     dd("Existing", $media);
+            // } else {
+            //     $newMedia = $user->photo()->create(['path' => $path1]);
+            //     // $newMedia = \App\Media::create(['path' => $path1]);
+            //     dd("new", $newMedia);
+            // }
+
+            // dd($media);
+
+            // $media = \App\Media::findOrFail($user->photo_id);
+            $path = explode('/', $user->avatar);
+            @unlink(public_path().'/storage/'.$this->folder.'/'.end($path));
+            // $media->save(['path'=>$path1]);
+
+            // $user->photo->path = $path1;
+
+            $data['avatar'] = $path1;
+        }
+        // dd($data);
         $user->update($data);
 
         return back();

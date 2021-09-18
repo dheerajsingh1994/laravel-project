@@ -36,7 +36,9 @@ class PostController extends Controller
     // show singular post
     public function show (Post $post){
         // if(auth()->user()->can('view',$post)){
-            return view('blog-post', ['post' => $post]);
+            $comments = $post->comments()->whereIsActive('1')->get();
+
+            return view('blog-post', compact(['post', 'comments']));
         // }
     }
 

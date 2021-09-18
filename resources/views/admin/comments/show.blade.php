@@ -1,12 +1,12 @@
 <x-admin-master>
     @section('content')
-        <h2>Manage Comments</h2>
+        <h2>Comments</h2>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header pt-3">
-                <h6 class="m-0 font-weight-bold text-primary">Comments</h6>
+                {{-- <h6 class="m-0 font-weight-bold text-primary">Comments for : {{$post->title}}</h6> --}}
             </div>
-            @if(count($comments))
+            @if (count($comments))
             <div class="card-body">
                 @if (session('msg'))
                     <div class="alert alert-success">{{session('msg')}}</div>
@@ -21,7 +21,7 @@
                                 <th>Email</th>
                                 <th>Body</th>
                                 <th>Post</th>
-                                <th>Replies</th>
+                                <th>Comments</th>
                                 <th>Status</th>
                                 <th>Options</th>
                             </tr>
@@ -38,7 +38,11 @@
                                     <a href="{{route('post', $comment->post->id)}}" target="_blank">View Post</a>
                                 </td>
                                 <td>
-                                    <a href="{{route('replies.show', $comment->id)}}" target="_blank">View Replies</a>
+                                    @if (count($comment->replies) > 0)
+                                    <a href="{{route('replies.show', $comment->id)}}">View Replies</a>
+                                    @else
+                                    {{"No replies"}}
+                                    @endif
                                 </td>
                                 <td>
                                     @if ($comment->is_active == 1)
@@ -77,15 +81,13 @@
                 </div>
             </div>
             @else
-            <div class="card-body">
-                <h4>No Comment!</h4>
-            </div>
+                
             @endif
         </div>
-        {{'Showing 1 of '. count($comments)}}
+        {{-- {{'Showing 1 of '. count($comments)}} --}}
         <div class="d-flex">
             <div class="mx-auto">
-                {{$comments->links()}}
+                {{-- {{$comments->links()}} --}}
             </div>
         </div>
     @endsection

@@ -33,7 +33,7 @@
                 class="file">
                 <br><br>
                 @if($post->post_image)
-                    <div><img height="50px" src="{{$post->post_image}}" alt="{{$post->title}}"></div>
+                    <div><img height="50px" src="{{asset($post->post_image)}}" alt="{{$post->title}}"></div>
                 @endif
             </div>
             <div class="form-group">

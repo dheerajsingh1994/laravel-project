@@ -24,22 +24,10 @@
                       <th>Author</th>
                       <th>Category</th>
                       <th>Created at</th>
-                      <th>Updated at</th>
+                      <th>Comments</th>
                       <th>Options</th>
                     </tr>
                   </thead>
-                  <tfoot>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Image</th>
-                      <th>Author</th>
-                      <th>Category</th>
-                      <th>Created at</th>
-                      <th>Updated at</th>
-                      <th>Options</th>
-                    </tr>
-                  </tfoot>
                   <tbody>
                     {{-- {{dd($posts)}} --}}
                       @foreach ($posts as $post)
@@ -56,10 +44,12 @@
                           <td>{{$post->user->name}}</td>
                           <td>{{$post->category->title}}</td>
                           <td>{{$post->created_at->diffForHumans()}}</td>
-                          <td>{{$post->updated_at->diffForHumans()}}</td>
-                            <td>
-                              {{-- @can('view',$post) --}}
-                              <a href="{{route('post.edit', $post->id)}}"><i class="fa fa-edit"></i></a>
+                          <td>
+                            <a href="{{route('comments.show', $post->id)}}">View Comments</a>
+                          </td>
+                          <td>
+                            {{-- @can('view',$post) --}}
+                            <a href="{{route('post.edit', $post->id)}}"><i class="fa fa-edit"></i></a>
                             <form action="{{route('post.delete', $post->id)}}" method="post" enctype="multipart/form">
                               @csrf
                               @method('DELETE')

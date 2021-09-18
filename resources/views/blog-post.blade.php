@@ -17,7 +17,7 @@
         <hr>
 
         <!-- Preview Image -->
-        <img class="img-fluid rounded" src="{{$post->post_image}}" alt="">
+        <img class="img-fluid rounded" src="{{asset($post->post_image)}}" alt="{{$post->title}}" style="height: 250px">
 
         <hr>
 
@@ -39,49 +39,142 @@
         <div class="card my-4">
           <h5 class="card-header">Leave a Comment:</h5>
           <div class="card-body">
-            <form>
+            <form action="{{route('comments.store')}}" method="POST">
+              @csrf
+              @method('POST')
+              <div class="row">
+                @if (session('msg'))
+                <div class="alert alert-success">{{session('msg')}}</div>                    
+                @endif
+              </div>
+              <input type="hidden" name="post_id" value="{{$post->id}}">
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+                <textarea class="form-control @error('body') is-invalid @enderror" name="body" rows="3"></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
         </div>
 
-        <!-- Single Comment -->
-        <div class="media mb-4">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-          <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-          </div>
-        </div>
-
         <!-- Comment with nested comments -->
+        @if(count($comments) > 0)
+        @foreach ($comments as $comment)
+
         <div class="media mb-4">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          @if ($comment->photo)
+            <img class="d-flex mr-3 rounded-circle" src="{{$comment->photo}}" alt="" height="60" width="60">
+          @else
+            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          @endif
           <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            <h4 class="mt-0 media-heading">
+              {{$comment->author}}
+              <small>{{$comment->created_at->diffForHumans()}}</small>
+            </h4>
+            <div class="comment-body">
+              {{$comment->body}}
 
+            </div>
+            {{-- <button class="btn btn-info comment-reply" type="button">Reply</button> --}}
             <div class="media mt-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              @if (Auth::user()->avatar)
+                <img class="d-flex mr-3 rounded-circle" src="{{Auth::user()->gravatar}}" alt="" height="60" width="60">
+              @else
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              @endif
               <div class="media-body">
-                <h5 class="mt-0">Commenter Name</h5>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                <h5 class="mt-0">{{Auth::user()->name}}</h5>
+                <form action="{{route('replies.store')}}" method="POST">
+                  @csrf
+                  @method('POST')
+                  <input type="hidden" name="comment_id" value="{{$comment->id}}">
+                  <div class="form-group">
+                    <textarea name="body" class="form-control @error('body') is-invalid @enderror" cols="30" rows="1" placeholder="Type your reply..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Reply</button>
+      
+                </form>
+              </div>
+            </div>
+            
+            @if(count($comment->replies) > 0)
+            @foreach($comment->replies as $reply)
+            @if ($reply->is_active)
+
+            {{-- reply body --}}
+            <div class="media mt-4">
+              @if ($reply->photo)
+                <img class="d-flex mr-3 rounded-circle" src="{{$reply->photo}}" alt="" height="60" width="60">
+              @else
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              @endif
+              <div class="media-body">
+                <h5 class="mt-0">{{$reply->author}}</h5>
+                <div class="commet-body">
+                  {{$reply->body}}
+                </div>
+                <div class="reply-icons">
+                  <i class="fa fa-reply"></i>
+                </div>
               </div>
             </div>
 
-            <div class="media mt-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+            {{-- reply form --}}
+            {{-- <div class="media mt-4">
+              @if (Auth::user()->avatar)
+                <img class="d-flex mr-3 rounded-circle" src="{{Auth::user()->avatar}}" alt="" height="60" width="60">
+              @else
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              @endif
               <div class="media-body">
-                <h5 class="mt-0">Commenter Name</h5>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                <h5 class="mt-0">{{Auth::user()->name}}</h5>
+                <form action="{{route('replies.store')}}" method="POST">
+                  @csrf
+                  @method('POST')
+                  <input type="hidden" name="comment_id" value="{{$comment->id}}">
+                  <div class="form-group">
+                    <textarea name="body" class="form-control @error('body') is-invalid @enderror" cols="30" rows="1" placeholder="Type your reply..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Reply</button>
+    
+                </form>
               </div>
-            </div>
+            </div> --}}
+
+            @endif
+            
+            @endforeach
+            @endif
 
           </div>
         </div>
+            
+        @endforeach
+        @endif
 
+
+
+        <h2>Discus Comment System</h2>
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            /*
+            var disqus_config = function () {
+            this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            };
+            */
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://http-laravel-project-test.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+        <script id="dsq-count-scr" src="//http-laravel-project-test.disqus.com/count.js" async></script>
     @endsection
 </x-home-master>

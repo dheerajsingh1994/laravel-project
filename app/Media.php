@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
 {
+    protected $fillable = [
+        'path',
+        'thumb_path',
+        'subject_id',
+        'subject_path',
+    ];
     /**
      * Get the parent subject model (user or post).
      * 

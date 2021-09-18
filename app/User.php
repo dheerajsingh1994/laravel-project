@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'name', 'avatar', 'email', 'password',
+        'username', 'name', 'avatar', 'email', 'password', 'photo_id'
     ];
 
     /**
@@ -112,5 +112,13 @@ class User extends Authenticatable
     public function photos(){
         return $this->morphMany('App\Media', 'subject');
     }
+
+    /**
+     * Fetch logged used gravatar
+     */
+    public function getGravatarAttribute(){
+        $hash = md5(strtolower(trim($this->attributes['email'])));
+        return "http://www.gravatar.com/avatar/".$hash.'?d=mm&size=64x64';
+    } 
 
 }
